@@ -11,9 +11,9 @@ Nothing of this is currently meant to for inclusion into mainstream Blender.
 Installation / Running
 ======================
 
-To run the examples use this command:
+To run the examples use this command in the root directory:
 
-    > PYTHONPATH=./ blender -P blender_async/examples/dialogs1.py
+    > PYTHONPATH=./ blender -P ./examples/app_events.py
 
 
 This project uses quite a few dependencies, so there is a dependency_utils module which makes them available to the PYTHONPATH. Something of an improvised package manager, if you will.
