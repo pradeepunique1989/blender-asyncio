@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : ./app_events.py
+# File              : ./examples/app_events.py
 # Author            : Pradeep Rajendran <pradeepunique1989@gmail.com>
 # Date              : 16.09.2018
 # Last Modified Date: 17.09.2018
@@ -32,20 +32,18 @@ async def handle_client(reader, writer):
     request = None
     while request != 'quit':
         request = (await reader.read(255)).decode('utf8')
-        print('\nHere %s\n'%(request))
+        # print('\nHere %s\n'%(request))
         # response = str(eval(request)) + '\n'
-        increment_x(bpy.data.objects['Cube'].location, float(request))
+        coords = list(map(float, request.split(',')))
+        print(coords)
+        set_location(bpy.data.objects['Cube'].location, coords)
         response = "OK\n";
         writer.write(response.encode('utf8'))
 
-# loop = asyncio.get_event_loop()
-# loop.create_task(asyncio.start_server(handle_client, 'localhost', 15555))
-# try:
-#     loop.run_forever()
-# except KeyboardInterrupt:
-#     loop.close()
-def increment_x(loc, value):
-    loc.x = value
+def set_location(loc, new_location):
+    loc.x = new_location[0]
+    loc.y = new_location[1]
+    loc.z = new_location[2]
 
 
 async def main():
