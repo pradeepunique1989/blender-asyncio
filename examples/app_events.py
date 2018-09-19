@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : app_events.py
+# File              : examples/app_events.py
 # Author            : Pradeep Rajendran <pradeepunique1989@gmail.com>
 # Date              : 16.09.2018
 # Last Modified Date: 18.09.2018
@@ -32,7 +32,7 @@ z = (1.1,2.2,3.3,4.4)
 async def handle_client(reader, writer):
     request = None
     while request != 'quit':
-        request = (await reader.read(255)).decode('utf8')
+        request = (await reader.read(1024)).decode('utf8')
         # print('\nHere %s\n'%(request))
         # response = str(eval(request)) + '\n'
 
