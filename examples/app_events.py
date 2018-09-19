@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# File              : ./examples/app_events.py
+# File              : app_events.py
 # Author            : Pradeep Rajendran <pradeepunique1989@gmail.com>
 # Date              : 16.09.2018
-# Last Modified Date: 17.09.2018
+# Last Modified Date: 18.09.2018
 # Last Modified By  : Pradeep Rajendran <pradeepunique1989@gmail.com>
 import bpy
 import asyncio
 from asyncio import Task, coroutine, sleep
 import blender_async
 from blender_async import app_handler
+import warnings
 
 # obj  = bpy.data.objects['Cube']
 # mesh = obj.data
@@ -34,16 +35,36 @@ async def handle_client(reader, writer):
         request = (await reader.read(255)).decode('utf8')
         # print('\nHere %s\n'%(request))
         # response = str(eval(request)) + '\n'
-        coords = list(map(float, request.split(',')))
-        print(coords)
-        set_location(bpy.data.objects['Cube'].location, coords)
-        response = "OK\n";
-        writer.write(response.encode('utf8'))
+
+        # coords = list(map(float, request.split(',')))
+        # print(coords)
+        # make_box(coords)
+        resp = "OK\n"
+        cmd = request.split('#')
+        if '0' == cmd[0]:
+            # Execute command
+            execute(cmd[1])
+        elif '1' == cmd[0]:
+            resp = evaluate(cmd[1])
+        else:
+            warnings.warn('Bad command')
+
+        writer.write(resp.encode('utf8'))
+
+def execute(command):
+    exec(command)
+
+def evaluate(expression):
+    response = str(eval(expression)) + '\n';
+    return response
 
 def set_location(loc, new_location):
     loc.x = new_location[0]
     loc.y = new_location[1]
     loc.z = new_location[2]
+
+def make_box(new_location):
+    bpy.ops.mesh.primitive_cube_add(location=new_location);
 
 
 async def main():
